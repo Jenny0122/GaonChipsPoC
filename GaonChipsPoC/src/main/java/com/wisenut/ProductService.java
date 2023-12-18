@@ -27,7 +27,7 @@ public class ProductService {
 
 		List<ProductVo> list = new ArrayList<>();
 		// 검색기 server 설정
-		String server_ip = "http://127.0.0.1"; // 5.3과 다른 부분
+		String server_ip = "127.0.0.1";
 		int server_port = 7000;
 		int server_timeout = 10 * 1000;
 
@@ -43,13 +43,13 @@ public class ProductService {
 		String DOCUMENT_FIELD = "DOCID,PR_CODE,PR_NAME,PR_UNIT,PR_INITIATEDDATE,PR_SORT,PR_GRP_GB,PR_PRODUCT_GB"; // 출력필드
 
 		// create object
-		QueryAPI7.Search search = new QueryAPI7.Search();
+		QueryAPI530.Search search = new QueryAPI530.Search();
 		int ret = 0;
 
 		// common query 설정
 		ret = search.w3SetCodePage("UTF-8");
 		ret = search.w3SetQueryLog(QUERY_LOG);
-		ret = search.w3SetCommonQuery(Query);
+		ret = search.w3SetCommonQuery(Query, 1);
 
 		// collection, 검색 필드, 출력 필드 설정
 		ret = search.w3AddCollection(COLLECTION);
@@ -57,8 +57,6 @@ public class ProductService {
 		ret = search.w3SetSortField(COLLECTION, SORT_FIELD);
 		ret = search.w3SetSearchField(COLLECTION, SEARCH_FIELD);
 		ret = search.w3SetDocumentField(COLLECTION, DOCUMENT_FIELD);
-		ret = search.w3SetUseSynonym(COLLECTION, 1);
-		ret = search.w3SetUseLa(COLLECTION, 1);
 		
 		// filter query 
 //		StringBuilder builder = new StringBuilder();
@@ -81,11 +79,11 @@ public class ProductService {
 //		ret = search.w3SetFilterQuery(COLLECTION, builder.toString());
 		
 		// 오타교정을 수행할 최소 검색 결과 건수 설정
-		ret = search.w3SetSpellCorrectionQuery(0);
+		ret = search.w3SetSpellCorrectionQuery(query, 0);
 
 		// request
 		ret = search.w3ConnectServer(server_ip, server_port, server_timeout);
-		ret = search.w3ReceiveSearchQueryResult();
+		ret = search.w3ReceiveSearchQueryResult(3);
 
 		// check error
 		if (search.w3GetError() != 0) {
@@ -98,7 +96,7 @@ public class ProductService {
 		int resultCount = search.w3GetResultCount(COLLECTION);
 		
 		// 오타가 교정된 단어를 반환
-		String suggestQuery = search.w3GetSuggestedQuery(COLLECTION);
+		String suggestQuery = search.w3GetSuggestedQuery();
 
 		System.out.println("검색 결과 : " + resultCount + "건 / 전체 건수 : " + totalCount + "건");
 
