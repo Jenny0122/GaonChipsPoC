@@ -16,14 +16,16 @@ public class ProductService {
 	 *
 	 * @author 안선정
 	 * @param query 검색어
-	 * @Param prSort 
+	 * @Param prSort
 	 * @Param prGRP
 	 * @param prProduct
 	 * @param contain
 	 */
 //	public List<ProductVo> searchTotalListByCategory(String query, int from, int count) {
-	
-	public List<ProductVo> searchTotalListByCategory(String query) {
+
+	public List<ProductVo> searchTotalList(String query) {
+
+		log.info("query : {}", query);
 
 		List<ProductVo> list = new ArrayList<>();
 		// 검색기 server 설정
@@ -37,7 +39,7 @@ public class ProductService {
 		String COLLECTION = "product";
 		int QUERY_LOG = 1;
 		int PAGE_START = 0;
-		int RESULT_COUNT = 100000; // 한번에 출력되는 검색 건수
+		int RESULT_COUNT = 10; // 한번에 출력되는 검색 건수
 		String SORT_FIELD = "SCORE/DESC"; // 정렬필드
 		String SEARCH_FIELD = "PR_CODE,PR_NAME,PR_SORT,PR_GRP_GB,PR_PRODUCT_GB,PR_SPRCODE"; // 검색필드
 		String DOCUMENT_FIELD = "DOCID,PR_CODE,PR_NAME,PR_UNIT,PR_INITIATEDDATE,PR_SORT,PR_GRP_GB,PR_PRODUCT_GB"; // 출력필드
@@ -57,15 +59,15 @@ public class ProductService {
 		ret = search.w3SetSortField(COLLECTION, SORT_FIELD);
 		ret = search.w3SetSearchField(COLLECTION, SEARCH_FIELD);
 		ret = search.w3SetDocumentField(COLLECTION, DOCUMENT_FIELD);
-		
-		// filter query 
+
+		// filter query
 //		StringBuilder builder = new StringBuilder();
-		
+
 //		builder.append("<PR_SORT:match:"+prSort+">").toString();
 //		builder.append("<PR_GRP_GB:match:"+prGRP+">").toString();
 //		builder.append("<PR_PRODUCT_GB:in:"+prProduct+" >").toString();
 //		builder.append("<PR_PRODUCT_GB:not_in:"+prProduct+" >").toString();
-		
+
 //		builder.append("<PR_SORT:match:"+prSort+">");
 //		builder.append("<PR_GRP_GB:match:"+prGRP+">");	
 //		
@@ -77,7 +79,7 @@ public class ProductService {
 //		}
 //		
 //		ret = search.w3SetFilterQuery(COLLECTION, builder.toString());
-		
+
 		// 오타교정을 수행할 최소 검색 결과 건수 설정
 		ret = search.w3SetSpellCorrectionQuery(query, 0);
 
@@ -94,7 +96,7 @@ public class ProductService {
 		// 전체건수, 결과건수 출력
 		int totalCount = search.w3GetResultTotalCount(COLLECTION);
 		int resultCount = search.w3GetResultCount(COLLECTION);
-		
+
 		// 오타가 교정된 단어를 반환
 		String suggestQuery = search.w3GetSuggestedQuery();
 
@@ -110,9 +112,16 @@ public class ProductService {
 			String prSort = search.w3GetField(COLLECTION, "PR_SORT", i);
 			String prGRP = search.w3GetField(COLLECTION, "PR_GRP_GB", i);
 			String prProduct = search.w3GetField(COLLECTION, "PR_PRODUCT_GB", i);
-			
-			
-			ProductVo vo = ProductVo.builder().code(code).name(name).unit(unit).initiateddate(initiateddate).prSort(prSort).prGRP(prGRP).prProduct(prProduct).build();
+
+			ProductVo vo = ProductVo.builder()
+					.code(code)
+					.name(name)
+					.unit(unit)
+					.initiateddate(initiateddate)
+					.prSort(prSort)
+					.prGRP(prGRP)
+					.prProduct(prProduct)
+					.build();
 
 			list.add(vo);
 		}

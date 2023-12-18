@@ -1,5 +1,7 @@
 package com.wisenut;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,18 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 //@CrossOrigin(origins = "*")
 @RequestMapping("/api")
 @RestController
+@Slf4j
 public class ProductController {
 
 	@Autowired
 	private ProductService service;
 	
 	@GetMapping("/search")
-	public ResponseEntity<ProductDTO> search(@RequestParam(name = "query") String query) {
+	public ResponseEntity<List<ProductVo>> search(@RequestParam(name = "query") String query) {
+		log.info("/search");
+		List<ProductVo> result = service.searchTotalList(query);
 		
-		return ResponseEntity.ok(ProductDTO.builder().build());
+		return ResponseEntity.ok(result);
 	}
 
 //	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
