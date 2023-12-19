@@ -12,31 +12,27 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductService {
 
 	/**
-	 * Execute Search By Category
+	 * Execute Search 
 	 *
 	 * @author 안선정
 	 * @param query 검색어
-	 * @Param prSort
-	 * @Param prGRP
-	 * @param prProduct
-	 * @param contain
 	 */
-//	public List<ProductVo> searchTotalListByCategory(String query, int from, int count) {
 
 	public List<ProductVo> searchTotalList(String query) {
 
 		log.info("query : {}", query);
 
 		List<ProductVo> list = new ArrayList<>();
+		
 		// 검색기 server 설정
 		String server_ip = "127.0.0.1";
 		int server_port = 7000;
 		int server_timeout = 10 * 1000;
 
-		String Query = query.replaceAll(" ", "");
+		String Query = query;
 
 		// collection, 검색필드, 출력필드 정의
-		String COLLECTION = "product";
+		String COLLECTION = "gaonchips";
 		int QUERY_LOG = 1;
 		int PAGE_START = 0;
 		int RESULT_COUNT = 10; // 한번에 출력되는 검색 건수
