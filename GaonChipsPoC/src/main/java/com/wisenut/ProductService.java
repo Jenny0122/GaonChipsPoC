@@ -3,6 +3,7 @@ package com.wisenut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +17,11 @@ public class ProductService {
 	 *
 	 * @author 안선정
 	 * @param query 검색어
-	 * @Param prSort
-	 * @Param prGRP
-	 * @param prProduct
-	 * @param contain
+	 * @throws Exception 
 	 */
-//	public List<ProductVo> searchTotalListByCategory(String query, int from, int count) {
+	public ResponseEntity<List<ProductVo>> searchTotalList(String query) throws Exception {
 
-	public List<ProductVo> searchTotalList(String query) {
-
-		log.info("query : {}", query);
+		log.info("query: {}", query);
 
 		List<ProductVo> list = new ArrayList<>();
 		// 검색기 server 설정
@@ -85,12 +81,14 @@ public class ProductService {
 
 		// request
 		ret = search.w3ConnectServer(server_ip, server_port, server_timeout);
+		log.info(String.valueOf(ret));
 		ret = search.w3ReceiveSearchQueryResult(3);
+		log.info(String.valueOf(ret));
 
 		// check error
 		if (search.w3GetError() != 0) {
-			log.debug("검색 오류 로그 : {}", search.w3GetErrorInfo());
-			return null;
+			log.error("검색 오류 로그 : {}", search.w3GetErrorInfo());
+			throw new Exception(search.w3GetErrorInfo());
 		}
 
 		// 전체건수, 결과건수 출력
@@ -126,7 +124,7 @@ public class ProductService {
 			list.add(vo);
 		}
 
-		return list;
+		return ResponseEntity.ok(list);
 
 	}
 }
