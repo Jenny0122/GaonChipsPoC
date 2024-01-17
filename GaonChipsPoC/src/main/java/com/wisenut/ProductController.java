@@ -1,6 +1,9 @@
 package com.wisenut;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 //@CrossOrigin(origins = "*")
-@RequestMapping("/api")
+@RequestMapping("${base.url}")
 @RestController
 @Slf4j
 public class ProductController {
 
 	@Autowired
 	private ProductService service;
-	
-	@GetMapping("/search")
-	public ResponseEntity<List<ProductVo>> search(@RequestParam(name = "query") String query) {
-		log.info("/search");
-		List<ProductVo> result = service.searchTotalList(query);
-		
-		return ResponseEntity.ok(result);
+
+	@GetMapping("/test")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok("ab");
+	}
+
+	final String SEARCH_API = "/search";
+	@GetMapping(SEARCH_API)
+	public ResponseEntity<List<ProductVo>> search(HttpServletRequest request,
+			@RequestParam(name = "query") String query) {
+		final String ip = request.getRemoteAddr();
+
+		log.info("\n ip: {}\n api: {}\n query: {}", ip, SEARCH_API, query);
+		try {
+			return service.searchTotalList(query);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return ResponseEntity.badRequest()
+					.body(new ArrayList<>());
+		}
+
 	}
 
 //	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")

@@ -3,6 +3,7 @@ package com.wisenut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,27 +13,26 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductService {
 
 	/**
-	 * Execute Search 
+	 * Execute Search By Category
 	 *
 	 * @author 안선정
 	 * @param query 검색어
+	 * @throws Exception 
 	 */
+	public ResponseEntity<List<ProductVo>> searchTotalList(String query) throws Exception {
 
-	public List<ProductVo> searchTotalList(String query) {
-
-		log.info("query : {}", query);
+		log.info("query: {}", query);
 
 		List<ProductVo> list = new ArrayList<>();
-		
 		// 검색기 server 설정
 		String server_ip = "127.0.0.1";
 		int server_port = 7000;
 		int server_timeout = 10 * 1000;
 
-		String Query = query;
+		String Query = query.replaceAll(" ", "");
 
 		// collection, 검색필드, 출력필드 정의
-		String COLLECTION = "gaonchips";
+		String COLLECTION = "product";
 		int QUERY_LOG = 1;
 		int PAGE_START = 0;
 		int RESULT_COUNT = 10; // 한번에 출력되는 검색 건수
@@ -81,12 +81,14 @@ public class ProductService {
 
 		// request
 		ret = search.w3ConnectServer(server_ip, server_port, server_timeout);
+		log.info(String.valueOf(ret));
 		ret = search.w3ReceiveSearchQueryResult(3);
+		log.info(String.valueOf(ret));
 
 		// check error
 		if (search.w3GetError() != 0) {
-			log.debug("검색 오류 로그 : {}", search.w3GetErrorInfo());
-			return null;
+			log.error("검색 오류 로그 : {}", search.w3GetErrorInfo());
+			throw new Exception(search.w3GetErrorInfo());
 		}
 
 		// 전체건수, 결과건수 출력
@@ -122,7 +124,7 @@ public class ProductService {
 			list.add(vo);
 		}
 
-		return list;
+		return ResponseEntity.ok(list);
 
 	}
 }
