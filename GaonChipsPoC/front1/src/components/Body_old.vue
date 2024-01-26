@@ -108,6 +108,7 @@
 
 <script>
 //import moment from 'moment'
+import ResultAppr from './ResultAppr.vue'
 
 export default {
   name: 'BodyContents',
@@ -151,7 +152,6 @@ export default {
 			console.log(val)
 		},
 		unLoadEvent: function(event) {
-			alert(123)
 
 			event.preventDefault()
 			event.returnValue = ''

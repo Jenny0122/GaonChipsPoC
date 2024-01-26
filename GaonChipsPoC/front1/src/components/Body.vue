@@ -60,8 +60,8 @@
 
                                     <div class="sub_c" id="cTag">
                                         <div class="con_in">
-                                            <div class="sc_title01">
-                                                검색어 <span class="search_text">'{{ inputQuery }}'</span>에 대하여 <strong>[총 {{ totalCount }}건]</strong> 통합검색 결과입니다.
+                                            <div class="sc_title01" v-if="outputQuery != ''">
+                                                검색어 <span class="search_text">'{{ outputQuery }}'</span>에 대하여 <strong>[총 {{ product.length }}건]</strong> 통합검색 결과입니다.
                                                 <a @click="fnShow('DivLayer100')" class="btn_detail_search">
                                                     <span>상세검색</span>
                                                 </a>
@@ -119,7 +119,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <ResultAppr v-if="outputQuery != ''"  :product="product" :outputQuery="outputQuery"/>
                                         <div class="paginate"></div>
                                     </div>
                                 </div>
@@ -141,6 +141,9 @@
 </template>
 
 <script>
+//import { relativeTimeThreshold } from 'moment';
+import ResultAppr from './ResultAppr.vue';
+
 export default {
     name: "BodyContents",
     data() {
@@ -168,6 +171,7 @@ export default {
             startDate: "2000-01-01",
             endDate: "",
             doctype: "",
+            product: []
         };
     },
     mounted() {
@@ -182,22 +186,22 @@ export default {
                 alert("검색어를 입력하세요");
                 return;
             }
-            alert(this.inputQuery);
-
+            // alert(this.inputQuery);
             this.axios
                 .get("/api/search", {
-                    params: {
-                        query: this.inputQuery,
-                    },
-                })
+                params: {
+                    query: this.inputQuery,
+                },
+            })
                 .then((res) => {
-                    console.log(res);
-                    this.outputQuery = this.inputQuery;
-                    this.inputQuery = "";
-                })
+                console.log(res);
+                this.outputQuery = this.inputQuery
+                this.inputQuery = ""
+                this.product = res.data
+            })
                 .catch((error) => {
-                    console.log(error);
-                });
+                console.log(error);
+            });
         },
         showDetail: function (val) {
             console.log(val);
@@ -207,12 +211,13 @@ export default {
             event.returnValue = "";
         },
         doSorting: function (val) {
-					console.log(val)
-				},
-				fnShow: function (val) {
-					console.log(val)
-				}
+            console.log(val);
+        },
+        fnShow: function (val) {
+            console.log(val);
+        }
     },
+    components: { ResultAppr }
 };
 </script>
 

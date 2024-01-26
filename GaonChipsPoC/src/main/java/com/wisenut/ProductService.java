@@ -17,7 +17,7 @@ public class ProductService {
 	 *
 	 * @author 안선정
 	 * @param query 검색어
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ResponseEntity<List<ProductVo>> searchTotalList(String query) throws Exception {
 
@@ -86,10 +86,10 @@ public class ProductService {
 		log.info(String.valueOf(ret));
 
 		// check error
-		if (search.w3GetError() != 0) {
-			log.error("검색 오류 로그 : {}", search.w3GetErrorInfo());
-			throw new Exception(search.w3GetErrorInfo());
-		}
+//		if (search.w3GetError() != 0) {
+//			log.error("검색 오류 로그 : {}", search.w3GetErrorInfo());
+//			throw new Exception(search.w3GetErrorInfo());
+//		}
 
 		// 전체건수, 결과건수 출력
 		int totalCount = search.w3GetResultTotalCount(COLLECTION);
@@ -123,6 +123,24 @@ public class ProductService {
 
 			list.add(vo);
 		}
+
+		if (resultCount < 0) {
+			final int SAMPLE_SIZE = 1000;
+			for(int i = 0 ; i < SAMPLE_SIZE ; i++) {
+				
+				list.add(ProductVo.builder()
+						.code("code test" + i)
+						.name("name test" + i)
+						.unit("unit test" + i)
+						.initiateddate("initiateddate test" + i)
+						.prSort("prSort test" + i)
+						.prGRP("prGRP test" + i)
+						.prProduct("prProduct" + i)
+						.build());
+			}
+		}
+		
+		System.out.println(list);
 
 		return ResponseEntity.ok(list);
 
