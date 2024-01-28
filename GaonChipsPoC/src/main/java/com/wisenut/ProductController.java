@@ -30,7 +30,7 @@ public class ProductController {
 
 	final String SEARCH_API = "/search";
 	@GetMapping(SEARCH_API)
-	public ResponseEntity<List<ProductVo>> search(HttpServletRequest request,
+	public ResponseEntity<List<FileSearchVo>> search(HttpServletRequest request,
 			@RequestParam(name = "query") String query) {
 		final String ip = request.getRemoteAddr();
 

@@ -19,26 +19,27 @@ public class ProductService {
 	 * @param query 검색어
 	 * @throws Exception
 	 */
-	public ResponseEntity<List<ProductVo>> searchTotalList(String query) throws Exception {
+	public ResponseEntity<List<FileSearchVo>> searchTotalList(String query) throws Exception {
 
 		log.info("query: {}", query);
 
-		List<ProductVo> list = new ArrayList<>();
+		List<FileSearchVo> list = new ArrayList<>();
 		// 검색기 server 설정
-		String server_ip = "127.0.0.1";
+		String server_ip = "128.134.179.83";
 		int server_port = 7000;
 		int server_timeout = 10 * 1000;
 
-		String Query = query.replaceAll(" ", "");
+		String Query = query;
 
 		// collection, 검색필드, 출력필드 정의
-		String COLLECTION = "product";
+		String COLLECTION = "file";
 		int QUERY_LOG = 1;
-		int PAGE_START = 0;
+		int EXTEND_OR = 0;
+		int PAGE_START = 0; // 검색 결과를 받아오는 시작 위치
 		int RESULT_COUNT = 10; // 한번에 출력되는 검색 건수
-		String SORT_FIELD = "SCORE/DESC"; // 정렬필드
-		String SEARCH_FIELD = "PR_CODE,PR_NAME,PR_SORT,PR_GRP_GB,PR_PRODUCT_GB,PR_SPRCODE"; // 검색필드
-		String DOCUMENT_FIELD = "DOCID,PR_CODE,PR_NAME,PR_UNIT,PR_INITIATEDDATE,PR_SORT,PR_GRP_GB,PR_PRODUCT_GB"; // 출력필드
+		String SORT_FIELD = "RANK/DESC"; // 정렬필드
+		String SEARCH_FIELD = "FILE_NAME"; // 검색필드
+		String DOCUMENT_FIELD = "DOCID,FILE_NAME,FILE_CONTENT,EXTENSION,FILE_SIZE,FILE_PATH,SFTP_FILE_PATH,DATE,ALIAS"; // 출력필드
 
 		// create object
 		QueryAPI530.Search search = new QueryAPI530.Search();
@@ -98,28 +99,24 @@ public class ProductService {
 		// 오타가 교정된 단어를 반환
 		String suggestQuery = search.w3GetSuggestedQuery();
 
-		System.out.println("검색 결과 : " + resultCount + "건 / 전체 건수 : " + totalCount + "건");
+		log.info("검색 결과 : " + resultCount + "건 / 전체 건수 : " + totalCount + "건");
 
 		for (int i = 0; i < resultCount; i++) {
 
 			// 기본 검색결과 객체 생성
-			String code = search.w3GetField(COLLECTION, "PR_CODE", i);
-			String name = search.w3GetField(COLLECTION, "PR_NAME", i);
-			String unit = search.w3GetField(COLLECTION, "PR_UNIT", i);
-			String initiateddate = search.w3GetField(COLLECTION, "PR_INITIATEDDATE", i);
-			String prSort = search.w3GetField(COLLECTION, "PR_SORT", i);
-			String prGRP = search.w3GetField(COLLECTION, "PR_GRP_GB", i);
-			String prProduct = search.w3GetField(COLLECTION, "PR_PRODUCT_GB", i);
+			String file_name = search.w3GetField(COLLECTION, "FILE_NAME", i);
+			String file_extension = search.w3GetField(COLLECTION, "EXTENSION", i);
+			String file_path = search.w3GetField(COLLECTION, "FILE_PATH", i);
+			String sftp_file_path = search.w3GetField(COLLECTION, "SFTP_FILE_PATH", i);
+			String date = search.w3GetField(COLLECTION, "DATE", i);
 
-			ProductVo vo = ProductVo.builder()
-					.code(code)
-					.name(name)
-					.unit(unit)
-					.initiateddate(initiateddate)
-					.prSort(prSort)
-					.prGRP(prGRP)
-					.prProduct(prProduct)
-					.build();
+			FileSearchVo vo = FileSearchVo.builder()
+												.file_name(file_name)
+												.file_extension(file_extension)
+												.file_path(file_path)
+												.sftp_file_path(sftp_file_path)
+												.date(date)
+												.build();
 
 			list.add(vo);
 		}
@@ -128,14 +125,12 @@ public class ProductService {
 			final int SAMPLE_SIZE = 1000;
 			for(int i = 0 ; i < SAMPLE_SIZE ; i++) {
 				
-				list.add(ProductVo.builder()
-						.code("code test" + i)
-						.name("name test" + i)
-						.unit("unit test" + i)
-						.initiateddate("initiateddate test" + i)
-						.prSort("prSort test" + i)
-						.prGRP("prGRP test" + i)
-						.prProduct("prProduct" + i)
+				list.add(FileSearchVo.builder()
+						.file_name("file_name" + i)
+						.file_extension("file_extension" + i)
+						.file_path("file_path" + i)
+						.sftp_file_path("sftp_file_path" + i)
+						.date("date" + i)
 						.build());
 			}
 		}
