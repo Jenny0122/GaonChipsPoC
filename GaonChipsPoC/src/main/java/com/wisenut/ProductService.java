@@ -111,20 +111,20 @@ public class ProductService {
 			String date = search.w3GetField(COLLECTION, "DATE", i);
 
 			FileSearchVo vo = FileSearchVo.builder()
-												.file_name(file_name)
-												.file_extension(file_extension)
-												.file_path(file_path)
-												.sftp_file_path(sftp_file_path)
-												.date(date)
-												.build();
+					.file_name(file_name)
+					.file_extension(file_extension)
+					.file_path(file_path)
+					.sftp_file_path(sftp_file_path)
+					.date(date)
+					.build();
 
 			list.add(vo);
 		}
 
 		if (resultCount < 0) {
 			final int SAMPLE_SIZE = 1000;
-			for(int i = 0 ; i < SAMPLE_SIZE ; i++) {
-				
+			for (int i = 0; i < SAMPLE_SIZE; i++) {
+
 				list.add(FileSearchVo.builder()
 						.file_name("file_name" + i)
 						.file_extension("file_extension" + i)
@@ -134,7 +134,7 @@ public class ProductService {
 						.build());
 			}
 		}
-		
+
 		System.out.println(list);
 
 		return ResponseEntity.ok(list);
