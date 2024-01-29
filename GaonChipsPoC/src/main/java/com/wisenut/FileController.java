@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("${base.url}")
 @RestController
 @Slf4j
-public class ProductController {
+public class FileController {
 
 	@Autowired
-	private ProductService service;
+	private FileService service;
 
 	@GetMapping("/test")
 	public ResponseEntity<String> test() {
