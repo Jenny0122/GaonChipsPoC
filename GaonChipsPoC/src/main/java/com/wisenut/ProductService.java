@@ -122,7 +122,7 @@ public class ProductService {
 		}
 
 		if (resultCount < 0) {
-			final int SAMPLE_SIZE = 1000;
+			final int SAMPLE_SIZE = 100;
 			for (int i = 0; i < SAMPLE_SIZE; i++) {
 
 				list.add(FileSearchVo.builder()
@@ -134,8 +134,6 @@ public class ProductService {
 						.build());
 			}
 		}
-
-		System.out.println(list);
 
 		return ResponseEntity.ok(list);
 
