@@ -1,6 +1,8 @@
 package com.wisenut;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,9 @@ public class FileController {
 	String location;
 
 	@GetMapping("/download")
-	public ResponseEntity<Resource> download(@RequestParam String name) throws MalformedURLException {
+	public ResponseEntity<Resource> download(@RequestParam String name) throws MalformedURLException, UnsupportedEncodingException {
+		
+		name = URLDecoder.decode(name, "UTF-8");
 
 		final String path = location + name;
 		log.info("file_path: {}", path);
