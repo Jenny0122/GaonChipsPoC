@@ -217,8 +217,8 @@ export default {
 
                 console.log(this.product)
 
-                for(var i in this.product) {                    
-                    this.product[i].file_name = this.product[i].file_name.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
+                for(var i in this.product) {
+                    this.product[i].file_highlighted_name = this.product[i].file_name.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
                     this.product[i].file_content = this.product[i].file_content.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
                     this.product[i].date = this.product[i].date.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
                 }
