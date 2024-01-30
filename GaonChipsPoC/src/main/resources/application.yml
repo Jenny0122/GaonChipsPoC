@@ -3,3 +3,6 @@ server:
 
 base:
   url: /api
+  
+  download:
+    path: /home/search/DOC/

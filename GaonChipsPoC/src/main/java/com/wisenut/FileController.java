@@ -1,16 +1,23 @@
 package com.wisenut;
 
+import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +36,7 @@ public class FileController {
 	}
 
 	final String SEARCH_API = "/search";
+
 	@GetMapping(SEARCH_API)
 	public ResponseEntity<List<FileSearchVo>> search(HttpServletRequest request,
 			@RequestParam(name = "query") String query) {
@@ -43,6 +51,24 @@ public class FileController {
 					.body(new ArrayList<>());
 		}
 
+	}
+	
+	@Value("${base.download.path}")
+	String location;
+
+	@GetMapping("/download")
+	public ResponseEntity<Resource> download(@RequestParam String name) throws MalformedURLException {
+
+		final String path = location + name;
+		log.info("file_path: {}", path);
+		Resource resource = new UrlResource(Paths.get(path)
+				.toUri());
+		log.info("file is exist? : {}", resource.exists());
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + UriUtils.encode(name, "UTF-8") + "\"")
+				.body(resource);
 	}
 
 //	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
