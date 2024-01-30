@@ -10,7 +10,7 @@
             <li class="dic_100 dic_aside" v-for="p in list.slice(perPage * (currentPage - 1), perPage * (currentPage))" :key="p.name">
                 <dl>
                     <dt class="title_area">
-                        <a :href="p.file_path" v-html="p.file_name" download></a>
+                        <a @click="download(p.file_name)" v-html="p.file_highlighted_name"></a>
                         <div class="title_info">
                             <!--<p class="title_area_name"><span>{{ p.file_name }}</span><span>인사팀</span></p>-->
                             <!--<span class="title_accuracy">[ 정확도 : 0.0 ]</span>-->
@@ -62,7 +62,23 @@ export default {
     created() {
     },
     beforeUnmount() {},
-    methods: {},
+    methods: {
+        download: function(val) {
+            this.axios
+                .get("/api/download", {
+                params: {
+                    name: val,
+                },
+            })
+                .then((res) => {
+                
+                console.log(res.data)
+            })
+                .catch((error) => {
+                console.error(error)
+            });
+        }
+    },
     computed: {
         list: function () {
             return this.product;
