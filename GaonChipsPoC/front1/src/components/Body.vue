@@ -64,10 +64,10 @@
                                         <p class="space"></p>
                                         <!-- lnb 끝 -->
 
-                                        <div class="sub_c" id="cTag">
+                                        <div style="padding: 0 5%" class="sub_c" id="cTag">
                                             <div class="con_in">
                                                 <div class="sc_title01" v-if="outputQuery != ''">
-                                                    검색어 <span class="search_text">'{{ outputQuery }}'</span>에 대하여 <strong>[총 {{ product.length }}건]</strong> 통합검색 결과입니다.
+                                                    검색어 <span class="search_text">'{{ outputQuery }}'</span>에 대하여 <strong>[총 {{ product.length }}건]</strong> 통합검색 결과입니다. <span style="font-weight: bold; color: gray;">({{ executeTime }}s)</span>
                                                     <!--
                                                     <a @click="fnShow('DivLayer100')" class="btn_detail_search">
                                                         <span>상세검색</span>
@@ -141,12 +141,14 @@
         
     </div>
     <!-- TOP버튼 -->
+    <!--
     <div id="MovTop" class="onlPsc">
         <a href="javascript:;">
             <s></s>
             <span>TOP</span>
         </a>
     </div>
+    -->
     </b-overlay>
 </template>
 
@@ -182,6 +184,7 @@ export default {
             endDate: "",
             doctype: "",
             product: [],
+            executeTime: 0,
             show: false
         };
     },
@@ -197,7 +200,9 @@ export default {
                 alert("검색어를 입력하세요");
                 return;
             }
-            // alert(this.inputQuery);
+
+            let start = new Date()
+
             this.show = true
             this.axios
                 .get("/api/search", {
@@ -206,14 +211,28 @@ export default {
                 },
             })
                 .then((res) => {
-                console.log(res);
                 this.outputQuery = this.inputQuery
                 this.inputQuery = ""
                 this.product = res.data
+
+                console.log(this.product)
+
+                for(var i in this.product) {                    
+                    this.product[i].file_name = this.product[i].file_name.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
+                    this.product[i].file_content = this.product[i].file_content.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
+                    this.product[i].date = this.product[i].date.replaceAll(this.outputQuery, '<strong class="hl">'+ this.outputQuery + '</strong>')
+                }
+
                 this.show = false
+                
+                let end = new Date()
+
+                this.executeTime = (end - start) / 1000
+
+                console.log('실행시간: ' + this.executeTime + "s")
             })
                 .catch((error) => {
-                console.log(error);
+                console.error(error);
             });
         },
         showDetail: function (val) {

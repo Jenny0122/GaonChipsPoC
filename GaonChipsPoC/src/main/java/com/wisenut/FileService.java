@@ -105,6 +105,7 @@ public class FileService {
 
 			// 기본 검색결과 객체 생성
 			String file_name = search.w3GetField(COLLECTION, "FILE_NAME", i);
+			String file_content = search.w3GetField(COLLECTION, "FILE_CONTENT", i);
 			String file_extension = search.w3GetField(COLLECTION, "EXTENSION", i);
 			String file_path = search.w3GetField(COLLECTION, "FILE_PATH", i);
 			String sftp_file_path = search.w3GetField(COLLECTION, "SFTP_FILE_PATH", i);
@@ -112,6 +113,7 @@ public class FileService {
 
 			FileSearchVo vo = FileSearchVo.builder()
 					.file_name(file_name)
+					.file_content(file_content)
 					.file_extension(file_extension)
 					.file_path(file_path)
 					.sftp_file_path(sftp_file_path)
@@ -127,6 +129,7 @@ public class FileService {
 
 				list.add(FileSearchVo.builder()
 						.file_name("file_name" + i)
+						.file_content("file_content" + i)
 						.file_extension("file_extension" + i)
 						.file_path("file_path" + i)
 						.sftp_file_path("sftp_file_path" + i)

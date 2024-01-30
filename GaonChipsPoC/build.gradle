@@ -27,6 +27,7 @@ ext {
 }
 
 dependencies {
+	implementation fileTree(dir: 'src/main/webapp/WEB-INF/lib', include: ['*.jar'])
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
