@@ -69,6 +69,7 @@ export default {
                 params: {
                     name: encodeURI(val),
                 },
+                responseType: "blob"
             })
                 .then((res) => {
                     const name = res.headers["content-disposition"]
