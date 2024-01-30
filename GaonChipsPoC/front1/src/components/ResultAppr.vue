@@ -72,9 +72,10 @@ export default {
                 responseType: "blob"
             })
                 .then((res) => {
+                    console.log(res.headers)
                     const name = res.headers["content-disposition"]
                                 .split("filename=")[1]
-                                .replace(/"/g, "");
+                                .replace(/"/g, "");                                
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement("a");
                     link.href = url;

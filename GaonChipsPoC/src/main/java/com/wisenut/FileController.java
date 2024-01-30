@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,10 +69,7 @@ public class FileController {
 
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\""
-//				+ UriUtils.encode(name, "UTF-8")
-				+ name
-				+ "\"")
+						"attachment; filename=\"" + UriUtils.encode(name, "UTF-8") + "\"")
 				.body(resource);
 	}
 
