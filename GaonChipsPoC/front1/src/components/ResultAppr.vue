@@ -79,7 +79,7 @@ export default {
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement("a");
                     link.href = url;
-                    link.setAttribute("download", name);
+                    link.setAttribute("download", encodeURI(name));
                     link.style.cssText = "display:none";
                     document.body.appendChild(link);
                     link.click();
