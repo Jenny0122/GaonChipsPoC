@@ -25,7 +25,7 @@ public class FileService {
 
 		List<FileSearchVo> list = new ArrayList<>();
 		// 검색기 server 설정
-		String server_ip = "128.134.179.83";
+		String server_ip = "127.0.0.1";
 		int server_port = 7000;
 		int server_timeout = 10 * 1000;
 
