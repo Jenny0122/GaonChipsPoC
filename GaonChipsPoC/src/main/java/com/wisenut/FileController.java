@@ -62,10 +62,10 @@ public class FileController {
 	public ResponseEntity<Resource> download(@RequestParam String name) throws MalformedURLException, UnsupportedEncodingException {
 		name = URLDecoder.decode(name, "UTF-8");
 		final String path = location + name;
-		log.info("file_path: {}", path);
+//		log.info("file_path: {}", path);
 		Resource resource = new UrlResource(Paths.get(path)
 				.toUri());
-		log.info("file is exist? : {}", resource.exists());
+//		log.info("file is exist? : {}", resource.exists());
 
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION,

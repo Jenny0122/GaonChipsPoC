@@ -48,10 +48,12 @@ public class FileService {
 		// common query 설정
 		ret = search.w3SetCodePage("UTF-8");
 		ret = search.w3SetQueryLog(QUERY_LOG);
+		ret = search.w3SetTraceLog(0);
 		ret = search.w3SetCommonQuery(Query, 1);
 
 		// collection, 검색 필드, 출력 필드 설정
 		ret = search.w3AddCollection(COLLECTION);
+		ret = search.w3SetQueryAnalyzer(COLLECTION, 1, 1, 1, 0);
 		ret = search.w3SetPageInfo(COLLECTION, PAGE_START, RESULT_COUNT);
 		ret = search.w3SetSortField(COLLECTION, SORT_FIELD);
 		ret = search.w3SetSearchField(COLLECTION, SEARCH_FIELD);
@@ -82,9 +84,12 @@ public class FileService {
 
 		// request
 		ret = search.w3ConnectServer(server_ip, server_port, server_timeout);
-		log.info(String.valueOf(ret));
+//		log.info(String.valueOf(ret));
 		ret = search.w3ReceiveSearchQueryResult(3);
-		log.info(String.valueOf(ret));
+		
+		ret = search.w3ReceiveMorphemeAnalysisResult(3);
+		
+//		log.info(String.valueOf(ret));
 
 		// check error
 //		if (search.w3GetError() != 0) {
